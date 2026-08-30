@@ -1,0 +1,15 @@
+[Unit]
+Description=SeaArt Proxy API
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/opt/seaart-proxy-hub/api
+EnvironmentFile=/opt/seaart-proxy-hub/api/.env
+ExecStart=/usr/bin/node src/server.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

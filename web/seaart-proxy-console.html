@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SeaArt Proxy Console</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"]{--text-sm:clamp(.875rem,.8rem + .35vw,1rem);--text-base:clamp(1rem,.95rem + .25vw,1.125rem);--text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);--text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;--color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-text:#28251d;--color-text-muted:#6d6b66;--color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;--color-success:#437a22;--color-warning:#964219;--color-error:#a12c7b;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;--shadow:0 10px 30px rgba(0,0,0,.08);--font:'Satoshi',sans-serif}
+[data-theme="dark"]{--color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;--color-surface-offset:#23211f;--color-border:#393836;--color-text:#ece9e3;--color-text-muted:#afaaa2;--color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-highlight:#313b3b;--color-success:#6daa45;--color-warning:#bb653b;--color-error:#d163a7;--shadow:0 14px 34px rgba(0,0,0,.35)}
+*{box-sizing:border-box;margin:0;padding:0} body{font-family:var(--font);background:var(--color-bg);color:var(--color-text);font-size:var(--text-base)} button,input,textarea,select{font:inherit;color:inherit} button{cursor:pointer;border:none}
+.wrap{min-height:100dvh;display:grid;grid-template-columns:300px 1fr} .sidebar{padding:var(--space-5);border-right:1px solid rgba(255,255,255,.08);background:var(--color-surface)} .main{padding:var(--space-5);display:grid;gap:var(--space-5);overflow:auto}
+.brand{display:flex;gap:var(--space-3);align-items:center;margin-bottom:var(--space-8)} .logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--color-primary),transparent);display:grid;place-items:center;border:1px solid rgba(255,255,255,.08)}
+.nav{display:grid;gap:var(--space-2)} .nav button{padding:.9rem 1rem;border-radius:var(--radius-lg);background:transparent;text-align:left;min-height:44px}.nav button.active,.nav button:hover{background:var(--color-surface-offset)}
+.card{background:var(--color-surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-xl);padding:var(--space-5);box-shadow:var(--shadow)} .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--space-5)}
+.grid3,.grid2{display:grid;gap:var(--space-5)} .grid3{grid-template-columns:repeat(3,1fr)} .grid2{grid-template-columns:repeat(2,1fr)}
+h1{font-size:var(--text-lg)} h2{font-size:var(--text-xl);line-height:1.05;max-width:20ch} h3{font-size:var(--text-lg)} p,.muted{color:var(--color-text-muted)} .pill,.badge{display:inline-flex;align-items:center;padding:.38rem .7rem;border-radius:var(--radius-full);font-size:.82rem}.pill{background:var(--color-primary-highlight)} .badge.ok{background:rgba(109,170,69,.18);color:#cde8be}.badge.warn{background:rgba(187,101,59,.17);color:#ffd1b0}.badge.err{background:rgba(209,99,167,.16);color:#ffd0ea}
+.toolbar{display:flex;gap:var(--space-3);flex-wrap:wrap}.btn{min-height:44px;padding:.9rem 1rem;border-radius:var(--radius-lg)}.btn-primary{background:var(--color-primary);color:#fff}.btn-primary:hover{background:var(--color-primary-hover)}.btn-secondary{background:var(--color-surface-offset);border:1px solid rgba(255,255,255,.08)}
+.list{display:grid;gap:var(--space-3);margin-top:1rem}.row{display:flex;justify-content:space-between;gap:var(--space-4);padding-top:var(--space-3);border-top:1px solid rgba(255,255,255,.08)}.row:first-child{border-top:none;padding-top:0}.code{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:var(--color-surface-2);padding:var(--space-4);border-radius:var(--radius-lg);margin-top:1rem}
+.form{display:grid;gap:var(--space-4)} .field{display:grid;gap:.45rem} .input,.textarea,.select{padding:.95rem 1rem;border-radius:var(--radius-lg);background:var(--color-surface-2);border:1px solid rgba(255,255,255,.08);outline:none;min-height:44px}.textarea{min-height:120px;resize:vertical}
+.view{display:none}.view.active{display:grid;gap:var(--space-5)}
+.toggle{min-width:44px;min-height:44px;border-radius:var(--radius-full);background:var(--color-surface-offset);border:1px solid rgba(255,255,255,.08)}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}.sidebar{display:none}.hero,.grid2,.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo"><svg viewBox="0 0 48 48" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" aria-label="SeaArt Proxy logo"><path d="M10 30c0-8 6-14 14-14h14"/><path d="M38 18v20H18"/><circle cx="18" cy="30" r="4" fill="currentColor" stroke="none"/></svg></div><div><h1>SeaArt Proxy</h1><p>Console de testes</p></div></div>
+    <nav class="nav">
+      <button class="active" data-view="overview">Visão geral</button>
+      <button data-view="accounts">Contas</button>
+      <button data-view="playground">Playground</button>
+      <button data-view="contracts">Contratos API</button>
+      <button data-view="deploy">Deploy</button>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="toolbar" style="justify-content:flex-end"><button class="toggle" data-theme-toggle aria-label="Alternar tema">◐</button></header>
+    <section class="view active" id="overview">
+      <div class="hero">
+        <article class="card"><div class="pill">Produto testável antes da produção</div><h2>Painel para validar login, quota, geração de imagem SeaArt e workflows ComfyUI.</h2><p style="margin-top:1rem">Use este console para navegar pela arquitetura e copiar os comandos de teste (curl) direto do README do repositório.</p></article>
+        <article class="card"><h3>Status do stack</h3><div class="list">
+          <div class="row"><div><strong>API Fastify</strong><div class="muted">rate limit + error handler + graceful shutdown</div></div><span class="badge ok">pronto</span></div>
+          <div class="row"><div><strong>SeaArt service</strong><div class="muted">bootstrap de sessão + stub seguro</div></div><span class="badge ok">pronto</span></div>
+          <div class="row"><div><strong>Comfy service</strong><div class="muted">local ou cloud via env</div></div><span class="badge ok">pronto</span></div>
+          <div class="row"><div><strong>MCP gateway</strong><div class="muted">bearer hoje, OAuth depois</div></div><span class="badge warn">privado</span></div>
+        </div></article>
+      </div>
+      <div class="grid3">
+        <article class="card"><div class="muted">Quota</div><h3>5 grátis</h3><p>Por usuário, controlada em <code>quotaService.js</code>.</p></article>
+        <article class="card"><div class="muted">Deploy</div><h3>VPS + Docker</h3><p>Veja <code>docs/DEPLOY_VPS.md</code> para o passo a passo.</p></article>
+        <article class="card"><div class="muted">Segurança</div><h3>Zero segredo no front</h3><p>Tudo passa pela API antes de tocar em provedores externos.</p></article>
+      </div>
+    </section>
+    <section class="view" id="accounts"><article class="card"><h3>Onde ficam as credenciais</h3><p>Todas as credenciais reais (SeaArt, ComfyUI, MCP) ficam apenas no <code>.env</code> da API, nunca neste painel.</p><div class="code">SEAART_MODE=sdk
+SEAART_EMAIL=...
+SEAART_PASSWORD=...
+COMFY_MODE=cloud
+COMFY_API_KEY=...
+MCP_BEARER_TOKEN=...</div></article></section>
+    <section class="view" id="playground"><div class="grid2">
+      <article class="card"><h3>Gerar imagem</h3><div class="code">curl -X POST http://127.0.0.1:8788/v1/images/generate \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"anime girl, clean lineart","user_id":"u1"}'</div></article>
+      <article class="card"><h3>Rodar workflow Comfy</h3><div class="code">curl -X POST http://127.0.0.1:8788/v1/comfy/run \
+  -H "Content-Type: application/json" \
+  -d '{"workflow_id":"poster-v1","input":{"prompt":"cinematic poster"}}'</div></article>
+    </div></section>
+    <section class="view" id="contracts"><article class="card"><h3>Endpoints</h3><div class="code">GET  /health
+POST /v1/auth/login
+GET  /v1/auth/me
+POST /v1/chat
+POST /v1/images/generate
+GET  /v1/users/quota
+POST /v1/comfy/run
+POST /v1/bootstrap/seaart
+GET  /v1/bootstrap/seaart
+ALL  /mcp</div></article></section>
+    <section class="view" id="deploy"><article class="card"><h3>Checklist de teste antes da produção</h3><div class="list">
+      <div class="row"><div><strong>/health responde 200</strong></div><span class="badge ok">obrigatório</span></div>
+      <div class="row"><div><strong>.env fora do git</strong></div><span class="badge ok">obrigatório</span></div>
+      <div class="row"><div><strong>Bearer do MCP configurado</strong></div><span class="badge warn">antes de expor</span></div>
+      <div class="row"><div><strong>Reverse proxy HTTPS</strong></div><span class="badge warn">antes de produção</span></div>
+    </div></article></section>
+  </main>
+</div>
+<script>
+const views=[...document.querySelectorAll('.view')],buttons=[...document.querySelectorAll('[data-view]')];
+function setView(id){views.forEach(v=>v.classList.toggle('active',v.id===id));buttons.forEach(b=>b.classList.toggle('active',b.dataset.view===id));}
+buttons.forEach(b=>b.onclick=()=>setView(b.dataset.view));
+(function(){const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;let d='dark';t.addEventListener('click',()=>{d=d==='dark'?'light':'dark';r.setAttribute('data-theme',d);});})();
+</script>
+</body>
+</html>
